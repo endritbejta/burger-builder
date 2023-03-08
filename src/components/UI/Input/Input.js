@@ -34,6 +34,7 @@ const input = (props) => {
     case "select":
       inputElement = (
         <select
+          style={{ width: "90%" }}
           onChange={props.changed}
           className={inputClasses.join(" ")}
           value={props.value}
@@ -56,6 +57,7 @@ const input = (props) => {
         />
       );
   }
+
   return (
     <div className={classes.Input}>
       <label className={classes.Label}>{props.label}</label>

@@ -1,24 +1,23 @@
 import React, { Component } from "react";
-import axios from "../../../axios-orders";
 
-import Order from "../../../components/Order/Order";
-import withErrorHandler from "../../../hoc/WithErrorHandler/withErrorHandler";
+import Order from "../../components/Order/Order";
+import axios from "../../axios-orders";
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 
 class Orders extends Component {
   state = {
     orders: [],
     loading: true,
   };
+
   componentDidMount() {
     axios
       .get("/orders.json")
       .then((res) => {
-        console.log(res.data);
         const fetchedOrders = [];
         for (let key in res.data) {
           fetchedOrders.push({ ...res.data[key], id: key });
         }
-        console.log(fetchedOrders);
         this.setState({ loading: false, orders: fetchedOrders });
       })
       .catch((err) => {
@@ -28,13 +27,15 @@ class Orders extends Component {
   render() {
     return (
       <div>
-        {this.state.orders.map((order) => (
-          <Order
-            key={order.id}
-            ingredients={order.ingredients}
-            price={+order.price}
-          />
-        ))}
+        {this.state.orders.map((order) => {
+          return (
+            <Order
+              ingredients={order.ingredients}
+              price={order.price}
+              key={order.id}
+            />
+          );
+        })}
       </div>
     );
   }

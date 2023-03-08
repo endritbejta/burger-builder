@@ -15,6 +15,7 @@
   border: 1px solid #ccc;
   background-color: #fff;
   font: inherit;
+  margin: 0 auto;
   padding: 6px 10px;
   display: block;
   width: 100%;
@@ -28,5 +29,5 @@
 
 .Invalid {
   border: 1px solid red;
-  background-color: rgb(234, 190, 185);
+  background-color: rgb(238, 177, 170);
 }
