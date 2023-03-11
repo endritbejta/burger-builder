@@ -6,6 +6,8 @@ import Button from "../../../components/UI/Button/Button";
 import classes from "./ContactData.css";
 import Input from "../../../components/UI/Input/Input";
 import { connect } from "react-redux";
+import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
+import * as actions from "../../../Store/actions/index";
 
 class ContactData extends Component {
   state = {
@@ -87,19 +89,17 @@ class ContactData extends Component {
         },
         value: "fastest",
         validation: {
-          required: true,
+          required: false,
         },
         valid: false,
         touched: false,
       },
     },
     formIsValid: false,
-    loading: false,
   };
 
   orderHandler = (e) => {
     e.preventDefault();
-    this.setState({ loading: true });
     const formData = {};
     for (let formElId in this.state.orderForm) {
       formData[formElId] = this.state.orderForm[formElId].value;
@@ -109,26 +109,19 @@ class ContactData extends Component {
       price: +this.props.price,
       orderData: formData,
     };
-    axios
-      .post("/orders.json", order)
-      .then((response) => {
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch((error) => {
-        this.setState({ loading: false });
-      });
+
+    this.props.onOrderBurger(order);
   };
 
   checkValidity(value, rules) {
-    let isValid = false;
+    let isValid = true;
 
     if (!rules) {
       return true;
     }
 
     if (rules.required) {
-      isValid = value.trim() !== "";
+      isValid = value.trim() !== "" && isValid;
     }
 
     if (rules.minLength) {
@@ -138,6 +131,18 @@ class ContactData extends Component {
     if (rules.maxLength) {
       isValid = value.length <= rules.maxLength && isValid;
     }
+
+    if (rules.isEmail) {
+      const pattern =
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+    }
+
+    if (rules.isNumeric) {
+      const pattern = /^\d+$/;
+      isValid = pattern.test(value) && isValid;
+    }
+
     return isValid;
   }
 
@@ -192,7 +197,7 @@ class ContactData extends Component {
         </Button>
       </form>
     );
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />;
     }
     return (
@@ -206,9 +211,19 @@ class ContactData extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice,
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    loading: state.order.loading,
   };
 };
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
