@@ -22,9 +22,9 @@ export const setIngredients = (ingredients) => {
   };
 };
 
-export const fetchIngsFailed = () => {
+export const fetchIngredientsFailed = () => {
   return {
-    type: actionTypes.FETCH_INGS_FAILED,
+    type: actionTypes.FETCH_INGREDIENTS_FAILED,
   };
 };
 
@@ -32,13 +32,13 @@ export const initIngredients = () => {
   return (dispatch) => {
     axios
       .get(
-        "https://burger-builder-react-5fb28-default-rtdb.europe-west1.firebasedatabase.app/Ingredients.json"
+        "https://burgerbuildernew-ad1e3-default-rtdb.europe-west1.firebasedatabase.app/ingredients.json"
       )
       .then((response) => {
         dispatch(setIngredients(response.data));
       })
       .catch((error) => {
-        dispatch(fetchIngsFailed());
+        dispatch(fetchIngredientsFailed());
       });
   };
 };

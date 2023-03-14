@@ -1,22 +1,15 @@
 .Auth {
-  margin: 20px auto;
-  width: 80%;
-  text-align: center;
-  box-shadow: 0 2px 3px #eee;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  padding: 10px;
-}
-
-.Auth input {
-  display: block;
-  width: 90%;
-  padding: 5px 10px;
-  margin: 5px auto;
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+    box-shadow: 0 2px 3px #ccc;
+    border: 1px solid #eee;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 @media (min-width: 600px) {
-  .Auth {
-    width: 500px;
-  }
+    .Auth {
+        width: 500px;
+    }
 }
